@@ -124,8 +124,8 @@ void SysTick_Handler(void)
 uint32_t getTick(void)
 {
 	__disable_irq();
-	_tick = tick;/* This Commond line is so important for us. So in this moment we dont want to any interrupt . 
-	So we did disable all irqs */
+	_tick = tick;/* This line is critical section. We don't want any interrupt to come and interrupt
+	during execution of this line . For more information, go to section 2-12 6:30 */
 	__enable_irq();
 	
 	return _tick;
