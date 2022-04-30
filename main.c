@@ -12,6 +12,13 @@
 
 #define GPIOD_CLOCK (1<<3)
 
+/* About Stack */
+uint32_t red_stack[40];
+uint32_t blue_stack[40];
+
+uint32_t *stack_pointer_red = &red_stack[40];
+uint32_t *stack_pointer_blue = &blue_stack[40];
+
 
 volatile uint32_t tick;
 volatile uint32_t _tick;
@@ -56,21 +63,30 @@ int RED_MAIN(void)
 
 
 int main()
-{
-	uint32_t volatile start = 0U;
-	
+{	
 	RCC_Config_HSE();
 	GPIO_Config();
-
-	if(start)
-	{
-		BLUE_MAIN();
-	}
-	else
-	{
-		RED_MAIN();
-	}
+	/* Stack For RED_MAIN thread */
+	/* 24 is about Excetion Entry in pdf of Cortex-M4 Devices Generic User Guide Generic User Guide  */
+	/* IRQ top of stack */
+	*(--stack_pointer_red) = (1U << 24); /*xPSR*/
+	*(--stack_pointer_red) = (uint32_t)&RED_MAIN; /* PC */
+	*(--stack_pointer_red) = 0x0000000DU; /* LR */
+	*(--stack_pointer_red) = 0x0000000EU; /* R12 */
+	*(--stack_pointer_red) = 0x0000000AU; /* R3 */
+	*(--stack_pointer_red) = 0x0000000EU; /* R2 */
+	*(--stack_pointer_red) = 0x0000000AU; /* R1 */
+	*(--stack_pointer_red) = 0x0000000DU; /* R0 */
 	
+	/* Stack for BLUE_MAIN thread */
+		*(--stack_pointer_blue) = (1U << 24); /*xPSR*/
+	*(--stack_pointer_blue) = (uint32_t)&BLUE_MAIN; /* PC */
+	*(--stack_pointer_blue) = 0x0000000BU; /* LR */
+	*(--stack_pointer_blue) = 0x0000000EU; /* R12 */
+	*(--stack_pointer_blue) = 0x0000000EU; /* R3 */
+	*(--stack_pointer_blue) = 0x0000000EU; /* R2 */
+	*(--stack_pointer_blue) = 0x0000000EU; /* R1 */
+	*(--stack_pointer_blue) = 0x0000000FU; /* R0 */
 	
 	while(1)
 	{
@@ -142,3 +158,5 @@ void RED_OFF(void)
 {
 	GPIOD->ODR &=~RED;
 }
+
+
