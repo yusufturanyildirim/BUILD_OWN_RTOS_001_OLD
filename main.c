@@ -30,36 +30,12 @@ void GPIO_Config(void);
 void SysTick_Handler(void);
 uint32_t getTick(void);
 void DelayS(uint32_t seconds);
+void BLUE_MAIN(void);
+void RED_MAIN(void);
 void BLUE_ON(void);
 void BLUE_OFF(void);
 void RED_ON(void);
 void RED_OFF(void);
-
-/* Function Mains */
-
-int  BLUE_MAIN(void)
-{
-	for(;;)
-	{
-		BLUE_ON();
-		DelayS(1);
-		BLUE_OFF();
-		DelayS(1);	
-	}
-}
-
-int RED_MAIN(void)
-{
-	for(;;)
-	{
-		RED_ON();
-		DelayS(1);
-		RED_OFF();
-		DelayS(1);	
-	}
-}
-
-
 
 
 int main()
@@ -93,6 +69,29 @@ int main()
 		//GPIOD->ODR ^= RED| GREEN| BLUE| ORANGE;  -> For toggle
 	}
 }
+
+void  BLUE_MAIN(void)
+{
+	for(;;)
+	{
+		BLUE_ON();
+		DelayS(1);
+		BLUE_OFF();
+		DelayS(1);	
+	}
+}
+
+void RED_MAIN(void)
+{
+	for(;;)
+	{
+		RED_ON();
+		DelayS(1);
+		RED_OFF();
+		DelayS(1);	
+	}
+}
+
 /*
  * HSE ON and System Freq. 16MHz
  */
