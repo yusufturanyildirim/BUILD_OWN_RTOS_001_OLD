@@ -103,7 +103,7 @@ void RCC_Config_HSE()
 	while(!((RCC->CR) & (1<<17)));
 	
 	SystemCoreClockUpdate(); /* https://www.keil.com/pack/doc/cmsis/Core/html/group__system__init__gr.html */
-	SysTick_Config(SystemCoreClock/100U); /* StsTick - RTOS Tick */
+	SysTick_Config(SystemCoreClock/100U); /* SysTick - RTOS Tick */
 	__enable_irq(); /* Enable interrupt to allow Systick to be interrupting and counting the time */ 
 	
 	
