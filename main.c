@@ -93,7 +93,7 @@ void RED_MAIN(void)
 }
 
 /*
- * HSE ON and System Freq. 16MHz
+ * HSE ON and System Freq. 8MHz
  */
 
 void RCC_Config_HSE()
